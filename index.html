@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>웹툰 컷 별 소요시간 계산 스톱워치</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+      #timer {
+        font-size: 2rem;
+        margin: 1rem 0;
+      }
+      button {
+        font-size: 1.2rem;
+        margin: 0 0.5rem;
+        padding: 0.5rem;
+      }
+      input {
+        font-size: 1.2rem;
+        width: 3rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>웹툰 컷 별 소요시간 계산 스톱워치</h1>
+    <p>작업할 컷 수를 입력하세요 ( 1~100) :</p>
+    <input type="number" id="numInput" min="1" max="100">
+    <br><br>
+    <button id="startStopBtn">작업시작</button>
+    <br><br>
+    <div id="timer">00:00:00</div>
+    <div id="result"></div>
+    <div id="stopCount"></div>
+
+    <script>
+      let startTime, endTime, elapsedTime = 0;
+      let timerInterval, stopCount = 0, running = false;
+      const timerDisplay = document.getElementById('timer');
+      const startStopBtn = document.getElementById('startStopBtn');
+      const numInput = document.getElementById('numInput');
+      const result = document.getElementById('result');
+      const stopCountDisplay = document.getElementById('stopCount');
+      const lapTimes = [];
+
+      function toggleTimer() {
+        if (running) {
+          stopTimer();
+          startStopBtn.textContent = '한컷 시작';
+        } else {
+          startTimer();
+          startStopBtn.textContent = '한컷 완료';
+        }
+      }
+
+      function startTimer() {
+        startTime = Date.now();
+        timerInterval = setInterval(function() {
+          elapsedTime = Date.now() - startTime;
+          timerDisplay.textContent = formatTime(elapsedTime);
+        }, 10);
+        running = true;
+      }
+
+      function stopTimer() {
+        clearInterval(timerInterval);
+        endTime = Date.now();
+        elapsedTime = endTime - startTime;
+        const averageTime = elapsedTime / numInput.value;
+        stopCount++;
+        lapTimes.push(elapsedTime);
+        result.textContent = `컷 별 평균 소요시간: ${formatTime(averageTime)}`;
+        stopCountDisplay.textContent = `작업 컷수: ${stopCount} / ${numInput.value}`;
+        if (stopCount === parseInt(numInput.value)) {
+          startStopBtn.style.display = 'none';
+          result.innerHTML += '<br><br>소요시간 통계:<br>';
+          lapTimes.forEach((time, index) => {
+            result.innerHTML += `${index + 1} 컷 소요시간: ${formatTime(time)}<br>`;
+          });
+        }
+        running = false;
+      }
+
+      function formatTime(time) {
+        const dateObj = new Date(time);
+        const minutes = dateObj.getUTCMinutes().toString().padStart(2, '0');
+        const seconds = dateObj.getSeconds().toString().padStart(2, '0');
+        const milliseconds = Math.floor(dateObj.getMilliseconds() / 10).toString().padStart(2, '0');
+        return `${minutes}:${seconds}:${milliseconds}`;
+      }
+
+      startStopBtn.addEventListener('click', toggleTimer);
+    </script>
+  </body>
+</html>
