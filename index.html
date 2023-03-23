@@ -1,157 +1,159 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--    CDN-->
-    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js" integrity="sha256-t0FDfwj/WoMHIBbmFfuOtZv1wtA977QCfsFR3p1K4No=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css" integrity="sha256-sWZjHQiY9fvheUAOoxrszw9Wphl3zqfVaz1kZKEvot8=" crossorigin="anonymous">
-    <title>웹툰 컷 별 소요시간 계산 스톱워치</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--    CDN-->
+  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"
+    integrity="sha256-t0FDfwj/WoMHIBbmFfuOtZv1wtA977QCfsFR3p1K4No=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css"
+    integrity="sha256-sWZjHQiY9fvheUAOoxrszw9Wphl3zqfVaz1kZKEvot8=" crossorigin="anonymous">
+  <title>웹툰 컷 별 소요시간 계산 스톱워치</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
 
-        h1 {
-            margin-top: 3rem;
-        }
+    h1 {
+      margin-top: 3rem;
+    }
 
-        p {
-            margin-bottom: 0.5rem;
-        }
+    p {
+      margin-bottom: 0.5rem;
+    }
 
-        #numInput {
-            font-size: 1.2rem;
-            padding: 0.5rem;
-            border: 2px solid #aaa;
-            border-radius: 5px;
-        }
+    #numInput {
+      font-size: 1.2rem;
+      padding: 0.5rem;
+      border: 2px solid #aaa;
+      border-radius: 5px;
+    }
 
-        /* 버튼 */
+    /* 버튼 */
 
-        @keyframes ring {
-            0% {
-                width: 30px;
-                height: 30px;
-                opacity: 1;
-            }
-            100% {
-                width: 300px;
-                height: 300px;
-                opacity: 0;
-            }
-        }
+    @keyframes ring {
+      0% {
+        width: 30px;
+        height: 30px;
+        opacity: 1;
+      }
 
-        button {
-            position: relative;
-            border: none;
-            min-width: 200px;
-            min-height: 50px;
-            background: linear-gradient(
-                    90deg,
-                    rgb(125, 221, 168) 0%,
-                    rgb(79, 209, 118) 100%
-            );
-            border-radius: 1000px;
-            color: darkslategray;
-            cursor: pointer;
-            font-weight: 700;
-            transition: 0.3s;
-        }
+      100% {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+      }
+    }
 
-        button:hover {
-            transform: scale(1.2);
-        }
+    button {
+      position: relative;
+      border: none;
+      min-width: 200px;
+      min-height: 50px;
+      background: linear-gradient(90deg,
+          rgb(125, 221, 168) 0%,
+          rgb(79, 209, 118) 100%);
+      border-radius: 1000px;
+      color: darkslategray;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.3s;
+    }
 
-        button:hover::after {
-            content: "";
-            width: 30px;
-            height: 30px;
-            border-radius: 100%;
-            border: 6px solid #abf5bb;
-            position: absolute;
-            z-index: -1;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: ring 1.5s infinite;
-        }
+    button:hover {
+      transform: scale(1.2);
+    }
 
-        /* 버튼 끝 */
-        #stopCount,
-        #result {
-            font-size: 1.2rem;
-            margin-top: 2rem;
-        }
+    button:hover::after {
+      content: "";
+      width: 30px;
+      height: 30px;
+      border-radius: 100%;
+      border: 6px solid #abf5bb;
+      position: absolute;
+      z-index: -1;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: ring 1.5s infinite;
+    }
 
-        #timer {
-            font-size: 3rem;
-            margin: 1.5rem 0;
-            color: #47806d;
-        }
+    /* 버튼 끝 */
+    #stopCount,
+    #result {
+      font-size: 1.2rem;
+      margin-top: 2rem;
+    }
 
-        table {
-            border-collapse: collapse;
-            margin: 2rem auto;
-        }
+    #timer {
+      font-size: 3rem;
+      margin: 1.5rem 0;
+      color: #47806d;
+    }
 
-        th,
-        td {
-            border: 1px solid #aaa;
-            padding: 0.5rem;
-        }
+    table {
+      border-collapse: collapse;
+      margin: 2rem auto;
+    }
 
-        thead {
-            position: sticky;
-            top: 0;
-            background-color: #f8f8f8;
-        }
+    th,
+    td {
+      border: 1px solid #aaa;
+      padding: 0.5rem;
+    }
 
-        tbody th,
-        tbody {
-            position: relative;
-        }
+    thead {
+      position: sticky;
+      top: 0;
+      background-color: #f8f8f8;
+    }
 
-        tbody th {
-            position: sticky;
-            left: 0;
-            background-color: #f8f8f8;
-        }
+    tbody th,
+    tbody {
+      position: relative;
+    }
 
-        td {
-            min-width: 5rem;
-            text-align: center;
-        }
+    tbody th {
+      position: sticky;
+      left: 0;
+      background-color: #f8f8f8;
+    }
 
-        th,
-        thead th {
-            min-width: 5rem;
-            text-align: center;
-        }
+    td {
+      min-width: 5rem;
+      text-align: center;
+    }
 
-        thead th {
-            background-color: #f1f1f1;
-        }
+    th,
+    thead th {
+      min-width: 5rem;
+      text-align: center;
+    }
 
-    </style>
+    thead th {
+      background-color: #f1f1f1;
+    }
+  </style>
 </head>
+
 <body>
-<h1>웹툰 컷 별 소요시간 계산 스톱워치</h1>
-<p>작업할 컷 수를 입력하세요 ( 1~100 ) :</p>
-<input type="number" id="numInput" min="1" max="100">
-<br><br>
-<button id="startStopBtn">작업시작</button>
-<br><br>
-<div id="stopCount"></div>
-<br>
-<div id="timer">00:00:00</div>
-<div id="result"></div>
-<br>
-<script>
+  <h1>웹툰 컷 별 소요시간 계산 스톱워치</h1>
+  <p>작업할 컷 수를 입력하세요 ( 1~100 ) :</p>
+  <input type="number" id="numInput" min="1" max="100">
+  <br><br>
+  <button id="startStopBtn">작업시작</button>
+  <br><br>
+  <div id="stopCount"></div>
+  <br>
+  <div id="timer">00:00:00</div>
+  <div id="result"></div>
+  <br>
+  <script>
     let startTime, endTime, elapsedTime = 0;
     let timerInterval, stopCount = 0, running = false;
     const timerDisplay = document.getElementById('timer');
@@ -162,76 +164,76 @@
     const lapTimes = [];
 
     function toggleTimer() {
-        const numInputValue = numInput.value;
-        if (numInputValue === "") {
-          Swal.fire(
-              '작업할 컷 수를 입력해주세요!',
-              '직접 숫자를 입력할 수도 있어요...',
-              'error'
-              ).then(function(){
-                window.location.reload();
-              }        );     
-        } else if (running) {
-            stopTimer();
-            startStopBtn.textContent = '한컷 시작';
-        } else {
-            startTimer();
-            startStopBtn.textContent = '한컷 완료';
-        }
+      const numInputValue = numInput.value;
+      if (numInputValue === "") {
+        Swal.fire(
+          '작업할 컷 수를 입력해주세요!',
+          '직접 숫자를 입력할 수도 있어요...',
+          'error'
+        ).then(function () {
+          window.location.reload();
+        });
+      } else if (running) {
+        stopTimer();
+        startStopBtn.textContent = '한컷 시작';
+      } else {
+        startTimer();
+        startStopBtn.textContent = '한컷 완료';
+      }
     }
 
     function startTimer() {
-        startTime = Date.now();
-        timerInterval = setInterval(function () {
-            elapsedTime = Date.now() - startTime;
-            timerDisplay.textContent = formatTime(elapsedTime);
-        }, 10);
-        running = true;
-        stopCountDisplay.textContent = `작업한 컷수: ${stopCount} / ${numInput.value}`;
+      startTime = Date.now();
+      timerInterval = setInterval(function () {
+        elapsedTime = Date.now() - startTime;
+        timerDisplay.textContent = formatTime(elapsedTime);
+      }, 10);
+      running = true;
+      stopCountDisplay.textContent = `작업한 컷수: ${stopCount} / ${numInput.value}`;
     }
 
     function stopTimer() {
-        clearInterval(timerInterval);
-        endTime = Date.now();
-        elapsedTime = endTime - startTime;
-        const averageTime = elapsedTime / numInput.value;
-        stopCount++;
-        lapTimes.push(elapsedTime);
-        result.textContent = `평균 소요시간: ${formatTime(averageTime)}`;
-        result.appendChild(document.createElement('br'));
-        result.appendChild(document.createElement('br'));
+      clearInterval(timerInterval);
+      endTime = Date.now();
+      elapsedTime = endTime - startTime;
+      const averageTime = elapsedTime / numInput.value;
+      stopCount++;
+      lapTimes.push(elapsedTime);
+      result.textContent = `평균 소요시간: ${formatTime(averageTime)}`;
+      result.appendChild(document.createElement('br'));
+      result.appendChild(document.createElement('br'));
 
-        if (stopCount === parseInt(numInput.value)) {
-            stopCountDisplay.textContent = `작업한 컷수: ${stopCount} / ${numInput.value}`;
-            startStopBtn.style.display = 'none';
-            timer.style.display = 'none';
-            const table = document.createElement('table');
-            table.innerHTML = '<thead><tr><th>컷 번호</th><th>소요 시간</th></tr></thead><tbody></tbody>';
-            const tbody = table.querySelector('tbody');
-            lapTimes.forEach((time, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>${index + 1}</td><td>${formatTime(time)}</td>`;
-                tbody.appendChild(row);
-            });
-            table.style.margin = '0 auto';
-            result.appendChild(table);
-        }
-        running = false;
+      if (stopCount === parseInt(numInput.value)) {
+        stopCountDisplay.textContent = `작업한 컷수: ${stopCount} / ${numInput.value}`;
+        startStopBtn.style.display = 'none';
+        timer.style.display = 'none';
+        const table = document.createElement('table');
+        table.innerHTML = '<thead><tr><th>컷 번호</th><th>소요 시간</th></tr></thead><tbody></tbody>';
+        const tbody = table.querySelector('tbody');
+        lapTimes.forEach((time, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `<td>${index + 1}</td><td>${formatTime(time)}</td>`;
+          tbody.appendChild(row);
+        });
+        table.style.margin = '0 auto';
+        result.appendChild(table);
+      }
+      running = false;
     }
 
     function formatTime(time) {
-        const dateObj = new Date(time);
-        const minutes = dateObj.getUTCMinutes().toString().padStart(2, '0');
-        const seconds = dateObj.getSeconds().toString().padStart(2, '0');
-        const milliseconds = Math.floor(dateObj.getMilliseconds() / 10).toString().padStart(2, '0');
-        return `${minutes}:${seconds}:${milliseconds}`;
+      const dateObj = new Date(time);
+      const minutes = dateObj.getUTCMinutes().toString().padStart(2, '0');
+      const seconds = dateObj.getSeconds().toString().padStart(2, '0');
+      const milliseconds = Math.floor(dateObj.getMilliseconds() / 10).toString().padStart(2, '0');
+      return `${minutes}:${seconds}:${milliseconds}`;
     }
 
     startStopBtn.addEventListener('click', () => {
-        toggleTimer();
-        numInput.disabled = true;
+      toggleTimer();
+      numInput.disabled = true;
     });
-</script>
+  </script>
 </body>
-</html>
 
+</html>
