@@ -21,6 +21,48 @@
         font-size: 1.2rem;
         width: 3rem;
       }
+      table {
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #aaa;
+        background-clip: padding-box;
+        scroll-snap-align: start;
+      }
+      thead {
+        z-index: 1000;
+        position: relative;
+      }
+      th,
+      td {
+        padding: 0.6rem;
+        min-width: 3rem;
+        text-align: left;
+        margin: 0;
+      }
+      thead th {
+        position: sticky;
+        top: 0;
+        background-clip: padding-box;
+        font: bold
+      }
+      tbody th {
+        background-clip: padding-box;
+        border-left: 0;
+      }
+      tbody {
+        z-index: 10;
+        position: relative;
+      }
+      tbody th {
+        position: sticky;
+        left: 0;
+      }
+      thead th,
+      tbody th {
+        background-color: #f8f8f8;
+      }
     </style>
   </head>
   <body>
@@ -34,6 +76,7 @@
     <br>
     <div id="timer">00:00:00</div>
     <div id="result"></div>
+    <br>
 
     <script>
       let startTime, endTime, elapsedTime = 0;
@@ -77,14 +120,23 @@
         stopCount++;
         lapTimes.push(elapsedTime);
         result.textContent = `평균 소요시간: ${formatTime(averageTime)}`;
+        result.appendChild(document.createElement('br'));
+        result.appendChild(document.createElement('br'));
 
         if (stopCount === parseInt(numInput.value)) {
-          startStopBtn.style.display = 'none';
-          result.innerHTML += '<br><br>< 컷 별 소요시간 ><br>';
-          lapTimes.forEach((time, index) => {
-            result.innerHTML += `${index + 1} 컷 : ${formatTime(time)}<br>`;
-          });
-        }
+          stopCountDisplay.textContent = `작업한 컷수: ${stopCount} / ${numInput.value}`;
+            startStopBtn.style.display = 'none';
+            const table = document.createElement('table');
+            table.innerHTML = '<thead><tr><th>컷 번호</th><th>소요 시간</th></tr></thead><tbody></tbody>';
+            const tbody = table.querySelector('tbody');
+            lapTimes.forEach((time, index) => {
+              const row = document.createElement('tr');
+              row.innerHTML = `<td>${index + 1}</td><td>${formatTime(time)}</td>`;
+              tbody.appendChild(row);
+            });
+            table.style.margin = '0 auto';
+            result.appendChild(table);
+          }
         running = false;
       }
 
