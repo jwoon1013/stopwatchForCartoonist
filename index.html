@@ -30,14 +30,14 @@
     <br><br>
     <button id="startStopBtn">작업시작</button>
     <br><br>
+    <div id="stopCount"></div>
+    <br>
     <div id="timer">00:00:00</div>
     <div id="result"></div>
-    <div id="stopCount"></div>
 
     <script>
       let startTime, endTime, elapsedTime = 0;
       let timerInterval, stopCount = 0, running = false;
-      const recentCutNum = document.getElementById('recentCutNum');
       const timerDisplay = document.getElementById('timer');
       const startStopBtn = document.getElementById('startStopBtn');
       const numInput = document.getElementById('numInput');
@@ -46,7 +46,11 @@
       const lapTimes = [];
 
       function toggleTimer() {
-        if (running) {
+        const numInputValue = numInput.value;
+        if (numInputValue===""){
+          alert("작업할 컷 수를 입력해주세요");
+          window.location.reload();
+        } else if(running) {
           stopTimer();
           startStopBtn.textContent = '한컷 시작';
         } else {
@@ -62,6 +66,7 @@
           timerDisplay.textContent = formatTime(elapsedTime);
         }, 10);
         running = true;
+        stopCountDisplay.textContent = `작업한 컷수: ${stopCount} / ${numInput.value}`;
       }
 
       function stopTimer() {
@@ -71,14 +76,13 @@
         const averageTime = elapsedTime / numInput.value;
         stopCount++;
         lapTimes.push(elapsedTime);
-        stopCountDisplay.textContent = `작업 컷수: ${stopCount} / ${numInput.value}`;
-        result.textContent = `컷 별 평균 소요시간: ${formatTime(averageTime)}`;
+        result.textContent = `평균 소요시간: ${formatTime(averageTime)}`;
 
         if (stopCount === parseInt(numInput.value)) {
           startStopBtn.style.display = 'none';
-          result.innerHTML += '<br><br>소요시간 통계:<br>';
+          result.innerHTML += '<br><br>< 컷 별 소요시간 ><br>';
           lapTimes.forEach((time, index) => {
-            result.innerHTML += `${index + 1} 컷 소요시간: ${formatTime(time)}<br>`;
+            result.innerHTML += `${index + 1} 컷 : ${formatTime(time)}<br>`;
           });
         }
         running = false;
