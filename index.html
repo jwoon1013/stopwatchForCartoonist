@@ -148,15 +148,16 @@
 </head>
 
 <body>
-  <h1>컷 별 소요시간 & 평균시간을 측정기</h1>
-  <p>작업할 컷 수( 1~100 )를 입력하고, [작업시작] 버튼을 누르세요! </p>
-  <input type="number" id="numInput" min="1" max="100">
-  <br><br>
+  <h1>컷 별 소요시간 & 평균시간 측정기</h1>
+  <p>아래 네모칸에 작업할 컷 수( 1~100 )를 입력하고, [작업시작] 버튼을 누르세요! </p>
+  <br>
+  <input type="number" id="numInput" min="1" max="100">  컷
+  <br><br><br>
   <button id="startStopBtn">작업시작</button>
   <br><br>
   <div id="stopCount"></div>
   <br>
-  <div id="timer">00:00:00</div>
+  <div id="timer" style="display:none;">00:00:00</div>
   <div id="result"></div>
   <br>
   <script>
@@ -184,8 +185,9 @@
         });
       } else if (running) {
         stopTimer();
-        startStopBtn.textContent = '한컷 시작';
+        startStopBtn.textContent = '다음컷 시작';
       } else {
+        timerDisplay.style.display = 'block';
         startTimer();
         startStopBtn.textContent = '한컷 완료';
       }
