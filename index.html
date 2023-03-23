@@ -187,8 +187,9 @@ thead th {
         result.appendChild(document.createElement('br'));
 
         if (stopCount === parseInt(numInput.value)) {
-          stopCountDisplay.textContent = `작업한 컷수: ${stopCount} / ${numInput.value}`;
+            stopCountDisplay.textContent = `작업한 컷수: ${stopCount} / ${numInput.value}`;
             startStopBtn.style.display = 'none';
+            timer.style.display = 'none';
             const table = document.createElement('table');
             table.innerHTML = '<thead><tr><th>컷 번호</th><th>소요 시간</th></tr></thead><tbody></tbody>';
             const tbody = table.querySelector('tbody');
